@@ -40,5 +40,23 @@ function filterByStatus(applications: Array<JobApplication>, status: Status): Ar
     return applications.filter(x => x.status === status);
 }
 
-console.log(filterByStatus(jobForMe, "interview"));
-console.log(filterByStatus(jobForMe, "offer"));
+function getCompanies(applications: Array<JobApplication>): Array<string> {
+    return applications.map(x => x.company);
+}
+
+function findById(applications: Array<JobApplication>, id: number): JobApplication | undefined {
+    return applications.find(x => x.id === id);
+}
+
+const found = findById(jobForMe, 99);
+
+// if (found !== undefined) {
+//     console.log(found.company);
+// }
+// else {
+//     console.log("No job application found with the given ID.");
+// }
+
+// console.log(found?.company);
+
+console.log(found?.company ?? "не найдено");
