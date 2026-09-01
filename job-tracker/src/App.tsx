@@ -36,7 +36,10 @@ function App() {
     <>
       <h1>Трекер откликов</h1>
       <ApplicationForm onAdd={(newApp) => setJobForMe([...jobForMe, newApp])} />
-      <ApplicationList applications={jobForMe} />
+      <ApplicationList
+        applications={jobForMe}
+        onDelete={(id) => setJobForMe(jobForMe.filter((a) => a.id !== id))}
+      />
     </>
   );
 }

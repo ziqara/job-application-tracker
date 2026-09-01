@@ -3,13 +3,18 @@ import { ApplicationItem } from "./ApplicationItem";
 
 interface ApplicationListProps {
   applications: Array<JobApplication>;
+
+  onDelete: (id: number) => void;
 }
 
-export function ApplicationList({ applications }: ApplicationListProps) {
+export function ApplicationList({
+  applications,
+  onDelete,
+}: ApplicationListProps) {
   return (
     <ul>
       {applications.map((item) => (
-        <ApplicationItem key={item.id} app={item} />
+        <ApplicationItem key={item.id} app={item} onDelete={onDelete} />
       ))}
     </ul>
   );
