@@ -14,7 +14,7 @@ export function ApplicationList({
   onCycleStatus,
 }: ApplicationListProps) {
   return (
-    <ul>
+    <ul className="list">
       {applications.map((item) => (
         <ApplicationItem
           key={item.id}

@@ -12,6 +12,7 @@ export function ApplicationForm({ onAdd }: ApplicationFormProps) {
 
   return (
     <form
+      className="form"
       onSubmit={(e) => {
         e.preventDefault();
         if (company.trim() === "" || position.trim() === "") {

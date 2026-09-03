@@ -12,12 +12,18 @@ export function ApplicationItem({
   onCycleStatus,
 }: ApplicationItemProps) {
   return (
-    <li>
-      {app.company} - {app.position}
+    <li className="card">
+      <span className="info">
+        {app.company} - {app.position}
+      </span>
       <button type="button" onClick={() => onDelete(app.id)}>
         X
       </button>
-      <button type="button" onClick={() => onCycleStatus(app.id)}>
+      <button
+        className={"badge badge-" + app.status}
+        type="button"
+        onClick={() => onCycleStatus(app.id)}
+      >
         {app.status}
       </button>
     </li>
