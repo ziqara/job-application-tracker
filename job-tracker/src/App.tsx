@@ -28,11 +28,20 @@ function App() {
       ? jobForMe
       : jobForMe.filter((a) => a.status === statusFilter);
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     fetch("/applications.json")
       .then((response) => response.json())
-      .then((data) => setJobForMe(data));
+      .then((data) => setJobForMe(data))
+      .catch((err) => {
+        console.error(err);
+        setError("Не удалось загрузить");
+      })
+      .finally(() => setLoading(false));
   }, []);
+
   return (
     <>
       <h1>Трекер откликов</h1>
@@ -47,17 +56,22 @@ function App() {
         <option value="rejected">Отказ</option>
       </select>
       <ApplicationForm onAdd={(newApp) => setJobForMe([...jobForMe, newApp])} />
-      <ApplicationList
-        applications={visible}
-        onDelete={(id) => setJobForMe(jobForMe.filter((a) => a.id !== id))}
-        onCycleStatus={(id) =>
-          setJobForMe(
-            jobForMe.map((a) =>
-              a.id === id ? { ...a, status: nextStatus(a.status) } : a,
-            ),
-          )
-        }
-      />
+      {loading && <p>Загрузка...</p>}
+      {error && <p>{error}</p>}
+      {!loading && !error && jobForMe.length === 0 && <p>Пока пусто</p>}
+      {!loading && !error && (
+        <ApplicationList
+          applications={visible}
+          onDelete={(id) => setJobForMe(jobForMe.filter((a) => a.id !== id))}
+          onCycleStatus={(id) =>
+            setJobForMe(
+              jobForMe.map((a) =>
+                a.id === id ? { ...a, status: nextStatus(a.status) } : a,
+              ),
+            )
+          }
+        />
+      )}
     </>
   );
 }
