@@ -4,6 +4,22 @@ import type { JobApplication, Status } from "./types";
 import { ApplicationList } from "./ApplicationList";
 import { ApplicationForm } from "./ApplicationForm";
 
+function nextStatus(current: Status): Status {
+  switch (current) {
+    case "sent":
+      return "interview";
+    case "interview":
+      return "offer";
+    case "offer":
+      return "rejected";
+    case "rejected":
+      return "sent";
+
+    default:
+      return "sent";
+  }
+}
+
 function App() {
   const [jobForMe, setJobForMe] = useState<JobApplication[]>([
     {
@@ -54,6 +70,13 @@ function App() {
       <ApplicationList
         applications={visible}
         onDelete={(id) => setJobForMe(jobForMe.filter((a) => a.id !== id))}
+        onCycleStatus={(id) =>
+          setJobForMe(
+            jobForMe.map((a) =>
+              a.id === id ? { ...a, status: nextStatus(a.status) } : a,
+            ),
+          )
+        }
       />
     </>
   );
