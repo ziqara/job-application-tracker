@@ -1,4 +1,5 @@
 import type { JobApplication } from "./types";
+import { Paper, Chip, Button } from "@mui/material";
 
 interface ApplicationItemProps {
   app: JobApplication;
@@ -6,26 +7,31 @@ interface ApplicationItemProps {
   onCycleStatus: (id: number) => void;
 }
 
+const statusColor = {
+  sent: "default",
+  interview: "info",
+  offer: "success",
+  rejected: "error",
+} as const;
+
 export function ApplicationItem({
   app,
   onDelete,
   onCycleStatus,
 }: ApplicationItemProps) {
   return (
-    <li className="card">
-      <span className="info">
-        {app.company} - {app.position}
+    <Paper sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
+      <span style={{ marginRight: "auto" }}>
+        {app.company} — {app.position}
       </span>
-      <button type="button" onClick={() => onDelete(app.id)}>
+      <Button size="small" color="error" onClick={() => onDelete(app.id)}>
         X
-      </button>
-      <button
-        className={"badge badge-" + app.status}
-        type="button"
+      </Button>
+      <Chip
+        label={app.status}
+        color={statusColor[app.status]}
         onClick={() => onCycleStatus(app.id)}
-      >
-        {app.status}
-      </button>
-    </li>
+      />
+    </Paper>
   );
 }

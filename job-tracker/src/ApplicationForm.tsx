@@ -1,5 +1,6 @@
 import type { Status, JobApplication } from "./types";
 import { useState } from "react";
+import { TextField, MenuItem, Button, Stack } from "@mui/material";
 
 interface ApplicationFormProps {
   onAdd: (app: JobApplication) => void;
@@ -11,8 +12,12 @@ export function ApplicationForm({ onAdd }: ApplicationFormProps) {
   const [status, setStatus] = useState<Status>("sent");
 
   return (
-    <form
-      className="form"
+    <Stack
+      component="form"
+      direction="row"
+      spacing={1}
+      useFlexGap
+      sx={{ mb: 3, alignItems: "center" }}
       onSubmit={(e) => {
         e.preventDefault();
         if (company.trim() === "" || position.trim() === "") {
@@ -31,27 +36,35 @@ export function ApplicationForm({ onAdd }: ApplicationFormProps) {
         setStatus("sent");
       }}
     >
-      <input
-        placeholder="Компания"
+      <TextField
+        label="Компания"
         value={company}
         onChange={(e) => setCompany(e.target.value)}
+        size="small"
+        sx={{ flex: 1 }}
       />
-      <input
-        placeholder="Позиция"
+      <TextField
+        label="Позиция"
         value={position}
         onChange={(e) => setPosition(e.target.value)}
+        size="small"
+        sx={{ flex: 1 }}
       />
-      <select
+      <TextField
+        select
         value={status}
         onChange={(e) => setStatus(e.target.value as Status)}
+        size="small"
       >
-        <option value="sent">Отправлено</option>
-        <option value="interview">Собеседование</option>
-        <option value="offer">Оффер</option>
-        <option value="rejected">Отказ</option>
-      </select>
+        <MenuItem value="sent">Отправлено</MenuItem>
+        <MenuItem value="interview">Собеседование</MenuItem>
+        <MenuItem value="offer">Оффер</MenuItem>
+        <MenuItem value="rejected">Отказ</MenuItem>
+      </TextField>
 
-      <button type="submit">Добавить</button>
-    </form>
+      <Button type="submit" variant="contained" sx={{ height: 40 }}>
+        Добавить
+      </Button>
+    </Stack>
   );
 }

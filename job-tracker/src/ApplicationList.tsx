@@ -1,5 +1,6 @@
 import type { JobApplication } from "./types";
 import { ApplicationItem } from "./ApplicationItem";
+import { Stack } from "@mui/material";
 
 interface ApplicationListProps {
   applications: Array<JobApplication>;
@@ -14,7 +15,7 @@ export function ApplicationList({
   onCycleStatus,
 }: ApplicationListProps) {
   return (
-    <ul className="list">
+    <Stack spacing={1.5}>
       {applications.map((item) => (
         <ApplicationItem
           key={item.id}
@@ -23,6 +24,6 @@ export function ApplicationList({
           onCycleStatus={onCycleStatus}
         />
       ))}
-    </ul>
+    </Stack>
   );
 }

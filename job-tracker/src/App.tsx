@@ -1,8 +1,15 @@
-import "./App.css";
 import { useState, useEffect } from "react";
 import type { JobApplication, Status } from "./types";
 import { ApplicationList } from "./ApplicationList";
 import { ApplicationForm } from "./ApplicationForm";
+import {
+  Container,
+  Typography,
+  TextField,
+  MenuItem,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 
 function nextStatus(current: Status): Status {
   switch (current) {
@@ -76,22 +83,30 @@ function App() {
       );
   };
   return (
-    <>
-      <h1>Трекер откликов</h1>
-      <select
+    <Container maxWidth="sm" sx={{ py: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Трекер откликов
+      </Typography>
+      <TextField
+        select
+        label="Фильтр по статусу"
+        size="small"
         value={statusFilter}
         onChange={(e) => setStatusFilter(e.target.value as Status | "all")}
+        sx={{ mb: 2, minWidth: 200 }}
       >
-        <option value="all">Все</option>
-        <option value="sent">Отправлено</option>
-        <option value="interview">Собеседование</option>
-        <option value="offer">Оффер</option>
-        <option value="rejected">Отказ</option>
-      </select>
+        <MenuItem value="all">Все</MenuItem>
+        <MenuItem value="sent">Отправлено</MenuItem>
+        <MenuItem value="interview">Собеседование</MenuItem>
+        <MenuItem value="offer">Оффер</MenuItem>
+        <MenuItem value="rejected">Отказ</MenuItem>
+      </TextField>
       <ApplicationForm onAdd={handleAdd} />
-      {loading && <p>Загрузка...</p>}
-      {error && <p>{error}</p>}
-      {!loading && !error && jobForMe.length === 0 && <p>Пока пусто</p>}
+      {loading && <CircularProgress />}
+      {error && <Alert severity="error">{error}</Alert>}
+      {!loading && !error && jobForMe.length === 0 && (
+        <Alert severity="info">Пока пусто</Alert>
+      )}
       {!loading && !error && (
         <ApplicationList
           applications={visible}
@@ -99,7 +114,7 @@ function App() {
           onCycleStatus={handleCycleStatus}
         />
       )}
-    </>
+    </Container>
   );
 }
 

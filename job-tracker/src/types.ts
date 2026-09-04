@@ -1,4 +1,4 @@
-export type Status = "sent" | "interview" | "offer" | "rejected" | "all";
+export type Status = "sent" | "interview" | "offer" | "rejected";
 
 export interface JobApplication {
   id: number;
