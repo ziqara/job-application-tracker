@@ -1,10 +1,12 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
-
+app.use(cors());
+app.use(express.json());
 const PORT = 3000;
 
-const applications = [
+let applications = [
   {
     id: 1,
     company: "TechCorp",
@@ -34,7 +36,22 @@ const applications = [
 app.get("/applications", (req, res) => {
   res.json(applications);
 });
-
+app.post("/applications", (req, res) => {
+  const newApp = req.body;
+  applications.push(newApp);
+  res.status(201).json(newApp);
+});
+app.delete("/applications/:id", (req, res) => {
+  const id = Number(req.params.id);
+  applications = applications.filter((a) => a.id !== id);
+  res.status(204).end();
+});
+app.patch("/applications/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const found = applications.find((a) => a.id === id);
+  found.status = req.body.status;
+  res.json(found);
+});
 app.listen(PORT, () => {
   console.log(`Сервер на http://localhost:${PORT}`);
 });
