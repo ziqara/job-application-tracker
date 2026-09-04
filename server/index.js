@@ -1,56 +1,39 @@
 import express from "express";
 import cors from "cors";
+import pool from "./db.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 const PORT = 3000;
 
-let applications = [
-  {
-    id: 1,
-    company: "TechCorp",
-    position: "Frontend Developer",
-    status: "sent",
-    date: "2023-01-01",
-  },
-
-  {
-    id: 2,
-    company: "InnovateX",
-    position: "Backend Developer",
-    status: "interview",
-    date: "2023-02-15",
-    notes: "Interview scheduled for next week.",
-  },
-
-  {
-    id: 3,
-    company: "DataSystems",
-    position: "Data Analyst",
-    status: "offer",
-    date: "2023-03-20",
-  },
-];
-
-app.get("/applications", (req, res) => {
-  res.json(applications);
+app.get("/applications", async (req, res) => {
+  const result = await pool.query("SELECT * FROM applications ORDER BY id");
+  res.json(result.rows);
 });
-app.post("/applications", (req, res) => {
-  const newApp = req.body;
-  applications.push(newApp);
-  res.status(201).json(newApp);
+app.post("/applications", async (req, res) => {
+  const { company, position, status, date, notes } = req.body;
+  const result = await pool.query(
+    `INSERT INTO applications (company, position, status, date, notes)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING *`,
+    [company, position, status, date, notes ?? null],
+  );
+  res.status(201).json(result.rows[0]);
 });
-app.delete("/applications/:id", (req, res) => {
+app.delete("/applications/:id", async (req, res) => {
   const id = Number(req.params.id);
-  applications = applications.filter((a) => a.id !== id);
+  await pool.query("DELETE FROM applications WHERE id = $1", [id]);
   res.status(204).end();
 });
-app.patch("/applications/:id", (req, res) => {
+app.patch("/applications/:id", async (req, res) => {
   const id = Number(req.params.id);
-  const found = applications.find((a) => a.id === id);
-  found.status = req.body.status;
-  res.json(found);
+  const { status } = req.body;
+  const result = await pool.query(
+    "UPDATE applications SET status = $1 WHERE id = $2 RETURNING *",
+    [status, id],
+  );
+  res.json(result.rows[0]);
 });
 app.listen(PORT, () => {
   console.log(`Сервер на http://localhost:${PORT}`);
