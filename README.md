@@ -13,7 +13,7 @@
 **Фронтенд**
 - React 19 + TypeScript
 - Vite
-- Material UI (тёмная тема)
+- Material UI
 
 **Бэкенд**
 - Node.js + Express 5
