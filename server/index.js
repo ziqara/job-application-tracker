@@ -13,6 +13,14 @@ app.get("/applications", async (req, res) => {
 });
 app.post("/applications", async (req, res) => {
   const { company, position, status, date, notes } = req.body;
+  if (
+    !company ||
+    company.trim() === "" ||
+    !position ||
+    position.trim() === ""
+  ) {
+    return res.status(400).json({ error: "Клиент прислал плохие данные" });
+  }
   const result = await pool.query(
     `INSERT INTO applications (company, position, status, date, notes)
      VALUES ($1, $2, $3, $4, $5)
@@ -23,7 +31,12 @@ app.post("/applications", async (req, res) => {
 });
 app.delete("/applications/:id", async (req, res) => {
   const id = Number(req.params.id);
-  await pool.query("DELETE FROM applications WHERE id = $1", [id]);
+  const result = await pool.query("DELETE FROM applications WHERE id = $1", [
+    id,
+  ]);
+  if (result.rowCount === 0) {
+    return res.status(404).json({ error: "Не удалось" });
+  }
   res.status(204).end();
 });
 app.patch("/applications/:id", async (req, res) => {
@@ -33,6 +46,9 @@ app.patch("/applications/:id", async (req, res) => {
     "UPDATE applications SET status = $1 WHERE id = $2 RETURNING *",
     [status, id],
   );
+  if (result.rows.length === 0) {
+    return res.status(404).json({ error: "Не найдено" });
+  }
   res.json(result.rows[0]);
 });
 app.listen(PORT, () => {

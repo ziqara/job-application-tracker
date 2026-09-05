@@ -49,7 +49,7 @@ function App() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleAdd = (newApp: JobApplication) => {
+  const handleAdd = (newApp: Omit<JobApplication, "id">) => {
     fetch("http://localhost:3000/applications", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TextField, MenuItem, Button, Stack } from "@mui/material";
 
 interface ApplicationFormProps {
-  onAdd: (app: JobApplication) => void;
+  onAdd: (app: Omit<JobApplication, "id">) => void;
 }
 
 export function ApplicationForm({ onAdd }: ApplicationFormProps) {
@@ -23,8 +23,7 @@ export function ApplicationForm({ onAdd }: ApplicationFormProps) {
         if (company.trim() === "" || position.trim() === "") {
           return;
         }
-        const newApp: JobApplication = {
-          id: Date.now(),
+        const newApp: Omit<JobApplication, "id"> = {
           company: company,
           position: position,
           status: status,
