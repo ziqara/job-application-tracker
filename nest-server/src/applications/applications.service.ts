@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 export interface Application {
   id: number;
@@ -32,5 +32,13 @@ export class ApplicationsService {
 
   findAll(): Application[] {
     return this.applications;
+  }
+
+  findOne(id: number): Application {
+    const result = this.applications.find((a) => a.id === id);
+    if (!result) {
+      throw new NotFoundException('Заявка с таким Id не найдена');
+    }
+    return result;
   }
 }
