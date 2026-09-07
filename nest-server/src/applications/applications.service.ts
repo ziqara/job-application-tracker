@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateApplicationDto } from './dto/create-application.dto';
 
 export interface Application {
   id: number;
@@ -30,6 +31,8 @@ export class ApplicationsService {
     },
   ];
 
+  private nextId = 3;
+
   findAll(): Application[] {
     return this.applications;
   }
@@ -40,5 +43,15 @@ export class ApplicationsService {
       throw new NotFoundException('Заявка с таким Id не найдена');
     }
     return result;
+  }
+
+  create(dto: CreateApplicationDto) {
+    const application = {
+      id: this.nextId++,
+      ...dto,
+      date: new Date().toISOString().slice(0, 10),
+    };
+    this.applications.push(application);
+    return application;
   }
 }
