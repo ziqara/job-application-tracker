@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { UpdateApplicationDto } from './dto/update-application.dto';
 import { CreateApplicationDto } from './dto/create-application.dto';
 
 export interface Application {
@@ -53,5 +54,16 @@ export class ApplicationsService {
     };
     this.applications.push(application);
     return application;
+  }
+
+  update(id: number, dto: UpdateApplicationDto): Application {
+    const application = this.findOne(id);
+    Object.assign(application, dto);
+    return application;
+  }
+
+  remove(id: number): void {
+    this.findOne(id);
+    this.applications = this.applications.filter((a) => a.id !== id);
   }
 }
