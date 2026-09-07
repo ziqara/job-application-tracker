@@ -15,11 +15,16 @@
 - Vite
 - Material UI
 
-**Бэкенд**
-- Node.js + Express 5 (`server/` — первая версия API)
+**Бэкенд, версия 1 (`server/`)**
+- Node.js + Express 5
 - PostgreSQL (драйвер `pg`, параметризованные запросы)
 - `dotenv` для конфигурации
-- NestJS (`nest-server/` — переписываю API, в процессе)
+
+**Бэкенд, версия 2 (`nest-server/`) — в процессе**
+- NestJS: контроллеры, сервисы, DI
+- DTO + валидация (`class-validator`, `ValidationPipe`)
+- полный CRUD готов, пока на данных в памяти
+- следующий шаг — Prisma + PostgreSQL
 
 ## Структура репозитория
 
@@ -94,5 +99,6 @@ npm run start:dev      # http://localhost:3000
 - [x] Хранение в PostgreSQL вместо JSON-файла
 - [x] Обработка ошибок на сервере (400, 404)
 - [x] Убрать генерацию `id` на клиенте — этим занимается база
-- [ ] Переезд бэкенда на NestJS (контроллеры, сервисы, DI) — в процессе
-- [ ] ORM: Prisma вместо голого `pg`
+- [x] Переезд бэкенда на NestJS: контроллеры, сервисы, DI, CRUD, DTO-валидация
+- [ ] Prisma + PostgreSQL в `nest-server/` (сейчас данные в памяти)
+- [ ] Подключить фронт к `nest-server/`, убрать `server/`
